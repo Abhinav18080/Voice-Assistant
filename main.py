@@ -3,8 +3,7 @@ import pyttsx3
 import datetime
 import wikipedia
 import webbrowser
-import os
-import pyjokes
+import time
 
 engine = pyttsx3.init()
 
@@ -55,8 +54,42 @@ def take_command():
         return ""
     
 #function to run Jarvis
+#still need to fix a lot of things
 def run_jarvis():
-    return "Hello I am jarvis"
+    chrome_path = r"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
+    webbrowser.get('chrome')
+    wish_user()
+    while True:
+        query = take_command()
+        if 'wikipedia' in query:
+            speak("Searching Wikipedia...")
+            query = query.replace("wikipedia", "")
+            try:
+                result = wikipedia.summary(query, sentences = 2)
+                speak("According to wikipedia: " + result)
+            except:
+                speak("Sorry, I couldn't find anything.")
+        elif 'open youtube' in query:
+            speak("Openning youtube...")
+            webbrowser.open("https://www.youtube.com/")
+        elif 'open google' in query:
+            webbrowser.open("https://www.google.com/")
+            speak("Google Opened")
+            time.sleep(5)
+            continue
+        elif 'time' in query:
+            speak(f"The current time is {datetime.datetime.now().strftime("%H:%M:%S")}")
+        elif 'exit' in query or 'bye' in query:
+            speak("GoodBye!, Have a great day")
+            break
+        else:
+            speak("Sorry, could you repeat that")
     
-#testing to check if the computer can say stuff
-speak("Eda mone")
+
+def main():
+    speak("Eda mone")
+    run_jarvis()
+
+if __name__ == "__main__":
+    main()
