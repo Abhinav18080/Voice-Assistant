@@ -7,9 +7,14 @@ import os
 import pyjokes
 
 engine = pyttsx3.init()
+
 #check voices later
 # voices = engine.getProperty('voices')
 # engine.setProperty('voice', voices[1].id)
+
+#adjust speaking rate (default is 200)
+rate = engine.getProperty('rate')
+engine.setProperty('rate', rate - 60)
 
 def speak(text):
     print(f"Jarvis: {text}")
