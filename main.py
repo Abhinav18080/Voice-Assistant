@@ -6,12 +6,7 @@ import webbrowser
 import time
 
 engine = pyttsx3.init()
-
-#check voices later
-# voices = engine.getProperty('voices')
-# engine.setProperty('voice', voices[1].id)
-
-#adjust speaking rate (default is 200)
+#adjusting the speed
 rate = engine.getProperty('rate')
 engine.setProperty('rate', rate - 60)
 
@@ -20,32 +15,32 @@ def speak(text):
     try:
         engine.say(text)
         engine.runAndWait()
-    except Exception as e:
-        print("Speech failed:", e)
+        time.sleep(0.3)
+    except:
+        engine = pyttsx3.init()
+        engine.say(text)
+        engine.runAndWait()
+        time.sleep(0.3)
 
 def wish_user():
     hour = int(datetime.datetime.now().hour)
     if hour < 12:
-        speak("Good Morning!")
+        speak("Good Morning! I am Jarvis. How can I help you today?")
     elif hour < 18:
-        speak("Good Afternoon!")
+        speak("Good Afternoon! I am Jarvis. How can I help you today?")
     else:
-        speak("Good Evening!")
-    time.sleep(5)
-    speak("I am Jarvis. How can I help you today?")
+        speak("Good Evening! I am Jarvis. How can I help you today?")
 
 def take_command():
     recognizer = sr.Recognizer()
-
     with sr.Microphone() as source:
         print("Listening...")
         recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.listen(source)
-    
     try:
         print("Recognizing...")
         command = recognizer.recognize_google(audio)
-        print("You said: ", command)
+        print("You said:", command)
         return command.lower()
     except sr.UnknownValueError:
         speak("Sorry, could you repeat that.")
@@ -53,9 +48,7 @@ def take_command():
     except sr.RequestError:
         speak("Network error.")
         return ""
-    
-#function to run Jarvis
-#still need to fix a lot of things
+
 def run_jarvis():
     chrome_path = r"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
     webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
@@ -63,35 +56,38 @@ def run_jarvis():
     wish_user()
     while True:
         query = take_command()
+        if query == "":
+            continue
         if 'wikipedia' in query:
             speak("Searching Wikipedia...")
             query = query.replace("wikipedia", "")
             try:
-                result = wikipedia.summary(query, sentences = 2)
-                speak("According to wikipedia: " + result)
+                result = wikipedia.summary(query, sentences=2)
+                for sentence in result.split('. '):
+                    speak(sentence)
             except:
                 speak("Sorry, I couldn't find anything.")
         elif 'open youtube' in query:
-            speak("Openning youtube...")
+            speak("Opening YouTube...")
             webbrowser.open("https://www.youtube.com/")
+            time.sleep(0.5)
         elif 'open google' in query:
+            speak("Opening Google...")
             webbrowser.open("https://www.google.com/")
-            speak("Google Opened")
-            time.sleep(5)
-            continue
+            time.sleep(0.5)
         elif 'time' in query:
             t = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"The current time is {t}")
         elif 'exit' in query or 'bye' in query:
-            speak("GoodBye!, Have a great day")
+            speak("Goodbye! Have a great day.")
             break
         else:
-            speak("Sorry, could you repeat that")
-    
+            speak("Sorry, could you repeat that?")
+            time.sleep(0.3)
 
 def main():
-    speak("Eda mone")
-    time.sleep(5)
+    speak("Jarvis is starting up...")
+    time.sleep(0.5)
     run_jarvis()
 
 if __name__ == "__main__":
