@@ -31,6 +31,7 @@ def wish_user():
         speak("Good Afternoon!")
     else:
         speak("Good Evening!")
+    time.sleep(5)
     speak("I am Jarvis. How can I help you today?")
 
 def take_command():
@@ -79,7 +80,8 @@ def run_jarvis():
             time.sleep(5)
             continue
         elif 'time' in query:
-            speak(f"The current time is {datetime.datetime.now().strftime("%H:%M:%S")}")
+            t = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"The current time is {t}")
         elif 'exit' in query or 'bye' in query:
             speak("GoodBye!, Have a great day")
             break
@@ -89,6 +91,7 @@ def run_jarvis():
 
 def main():
     speak("Eda mone")
+    time.sleep(5)
     run_jarvis()
 
 if __name__ == "__main__":
