@@ -33,6 +33,7 @@ def wish_user():
 
 def take_command():
     recognizer = sr.Recognizer()
+    recognizer.pause_threshold = 5.0
     with sr.Microphone() as source:
         print("Listening...")
         recognizer.adjust_for_ambient_noise(source)
