@@ -51,8 +51,7 @@ def take_command():
 
 def run_jarvis():
     chrome_path = r"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
-    webbrowser.get('chrome')
+    chrome = webbrowser.BackgroundBrowser(chrome_path)
     wish_user()
     while True:
         query = take_command()
@@ -69,15 +68,16 @@ def run_jarvis():
                 speak("Sorry, I couldn't find anything.")
         elif 'open youtube' in query:
             speak("Opening YouTube...")
-            webbrowser.open("https://www.youtube.com/")
+            chrome.open("https://www.youtube.com/")
             time.sleep(0.5)
         elif 'open google' in query:
             speak("Opening Google...")
-            webbrowser.open("https://www.google.com/")
+            chrome.open("https://www.google.com/")
             time.sleep(0.5)
-        elif 'time' in query:
-            t = datetime.datetime.now().strftime("%H:%M:%S")
-            speak(f"The current time is {t}")
+        elif 'open gmail' in query:
+            speak("Opening Gmail")
+            chrome.open("https://www.gmail.com/")
+            time.sleep(0.5)
         elif 'exit' in query or 'bye' in query:
             speak("Goodbye! Have a great day.")
             break
